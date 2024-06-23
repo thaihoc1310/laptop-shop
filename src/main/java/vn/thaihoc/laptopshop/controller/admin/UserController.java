@@ -1,4 +1,4 @@
-package vn.thaihoc.laptopshop.controller;
+package vn.thaihoc.laptopshop.controller.admin;
 
 import java.util.List;
 
@@ -34,7 +34,7 @@ public class UserController {
     public String getUserPage(Model model) {
         List<User> users = this.userService.getAllUsers();
         model.addAttribute("users1", users);
-        return "/admin/user/table-users";
+        return "/admin/user/user_view";
     }
 
     @GetMapping("/admin/user/{id}")
