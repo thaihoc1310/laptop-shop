@@ -30,7 +30,7 @@ public class User {
     private String avatar;
 
     // roleid
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
 

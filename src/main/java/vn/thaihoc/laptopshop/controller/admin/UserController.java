@@ -2,6 +2,7 @@ package vn.thaihoc.laptopshop.controller.admin;
 
 import java.util.List;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
@@ -20,10 +21,13 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserController {
     private final UserService userService;
     private final UploadService uploadService;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserController(UserService userService, UploadService uploadService) {
+    public UserController(UserService userService, UploadService uploadService,
+            PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.uploadService = uploadService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping("/")
@@ -60,7 +64,11 @@ public class UserController {
     public String postcreateUser(Model model, @ModelAttribute("newUser") User thaihoc,
             @RequestParam("imageFile") MultipartFile file) {
         String avatar = this.uploadService.handleSaveUploadFile(file, "avatar");
-        // this.userService.handleSaveUser(thaihoc);
+        String hashPassword = this.passwordEncoder.encode(thaihoc.getPassword());
+        thaihoc.setAvatar(avatar);
+        thaihoc.setPassword(hashPassword);
+        thaihoc.setRole(userService.getRoleByName(thaihoc.getRole().getName()));
+        userService.handleSaveUser(thaihoc);
         return "redirect:/admin/user";
     }
 
@@ -80,7 +88,7 @@ public class UserController {
             userUpdate.setAddress(thaihoc.getAddress());
             this.userService.handleSaveUser(userUpdate);
         }
-        // neu save luon se mat email
+        // use way below could be loss email and id
         // this.userService.handleSaveUser(thaihoc);
         return "redirect:/admin/user";
     }
