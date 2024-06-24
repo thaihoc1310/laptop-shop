@@ -47,4 +47,9 @@ public class UploadService {
         }
         return finalName;
     }
+
+    public String getAbsolutePath(String targetFolder, String userAvatar) {
+        return "/images" + File.separator + targetFolder + File.separator
+                + userAvatar;
+    }
 }

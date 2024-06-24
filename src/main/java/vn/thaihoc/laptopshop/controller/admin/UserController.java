@@ -51,6 +51,7 @@ public class UserController {
         User user = this.userService.getUserById(id);
         model.addAttribute("id", id);
         model.addAttribute("user", user);
+        model.addAttribute("imagePath", this.uploadService.getAbsolutePath("avatar", user.getAvatar()));
         return "/admin/user/user-inf";
     }
 
@@ -76,16 +77,22 @@ public class UserController {
     public String getUpdateUserPage(Model model, @PathVariable long id) {
         User user = this.userService.getUserById(id);
         model.addAttribute("user-update", user);
+        System.out.println(this.uploadService.getAbsolutePath("avatar", user.getAvatar()));
+        model.addAttribute("imagePath", this.uploadService.getAbsolutePath("avatar", user.getAvatar()));
         return "/admin/user/update-user";
     }
 
     @PostMapping("/admin/user/update")
-    public String postUpdateUserDetail(Model model, @ModelAttribute("user-update") User thaihoc) {
+    public String postUpdateUserDetail(Model model, @ModelAttribute("user-update") User thaihoc,
+            @RequestParam("imageFile") MultipartFile file) {
         User userUpdate = this.userService.getUserById(thaihoc.getId());
         if (!userUpdate.equals(null)) {
             userUpdate.setFullName(thaihoc.getFullName());
             userUpdate.setPhone(thaihoc.getPhone());
             userUpdate.setAddress(thaihoc.getAddress());
+            userUpdate.setRole(this.userService.getRoleByName(thaihoc.getRole().getName()));
+            if (!file.isEmpty())
+                userUpdate.setAvatar(this.uploadService.handleSaveUploadFile(file, "avatar"));
             this.userService.handleSaveUser(userUpdate);
         }
         // use way below could be loss email and id

@@ -18,6 +18,16 @@
                 <!-- Latest compiled JavaScript -->
                 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
                 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+                <script>
+                    $(document).ready(() => {
+                        const avatarFile = $("#avatarFile");
+                        avatarFile.change(function (e) {
+                            const imgURL = URL.createObjectURL(e.target.files[0]);
+                            $("#avatarPreview").attr("src", imgURL);
+                            $("#avatarPreview").css({ "display": "block" });
+                        });
+                    }); 
+                </script>
             </head>
 
             <body class="sb-nav-fixed">
@@ -37,7 +47,7 @@
                                         <h1>Update a user</h1>
                                         <hr />
                                         <form:form method="post" action="/admin/user/update"
-                                            modelAttribute="user-update">
+                                            modelAttribute="user-update" class="row" enctype="multipart/form-data">
                                             <div class="mb-3" style="display: none;">
                                                 <label class="form-label">Id:</label>
                                                 <form:input type="Number" class="form-control" path="id" />
@@ -47,11 +57,11 @@
                                                 <form:input type="email" class="form-control" path="email"
                                                     disabled="true" />
                                             </div>
-                                            <div class="mb-3">
+                                            <div class="mb-3 col-md-6">
                                                 <label class="form-label">Phone Number:</label>
                                                 <form:input type="text" class="form-control" path="phone" />
                                             </div>
-                                            <div class="mb-3">
+                                            <div class="mb-3 col-md-6">
                                                 <label class="form-label">Full Name:</label>
                                                 <form:input type="text" class="form-control" path="fullName" />
                                             </div>
@@ -59,7 +69,25 @@
                                                 <label class="form-label">Address:</label>
                                                 <form:input type="text" class="form-control" path="address" />
                                             </div>
-                                            <button type="submit" class="btn btn-warning">Update</button>
+                                            <div class="mb-3 col-md-6">
+                                                <label for="avatarFile" class="form-label">Avatar:</label>
+                                                <input id="avatarFile" class="form-control" type="file"
+                                                    accept=".png, .jpg, .jpeg" name="imageFile" />
+                                            </div>
+                                            <div class="mb-3 col-md-6">
+                                                <label class="form-label">Role:</label>
+                                                <form:select class="form-select" path="role.name">
+                                                    <form:option value="ADMIN">ADMIN</form:option>
+                                                    <form:option value="USER">USER</form:option>
+                                                </form:select>
+                                            </div>
+                                            <div class="mb-3 col-12">
+                                                <img src="${imagePath}" style="max-height: 250px; display: 'block';"
+                                                    alt="avater preview" id="avatarPreview" />
+                                            </div>
+                                            <div class="mb-5 col-12">
+                                                <button type="submit" class="btn btn-warning">Update</button>
+                                            </div>
                                         </form:form>
                                     </div>
                                 </div>
