@@ -6,19 +6,24 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
 import vn.thaihoc.laptopshop.domain.User;
+import vn.thaihoc.laptopshop.service.UploadService;
 import vn.thaihoc.laptopshop.service.UserService;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 public class UserController {
     private final UserService userService;
+    private final UploadService uploadService;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, UploadService uploadService) {
         this.userService = userService;
+        this.uploadService = uploadService;
     }
 
     @GetMapping("/")
@@ -52,9 +57,10 @@ public class UserController {
     }
 
     @PostMapping(value = "/admin/user/create")
-    public String postcreateUser(Model model, @ModelAttribute("newUser") User thaihoc) {
-        // System.out.println("run here" + thaihoc);
-        this.userService.handleSaveUser(thaihoc);
+    public String postcreateUser(Model model, @ModelAttribute("newUser") User thaihoc,
+            @RequestParam("imageFile") MultipartFile file) {
+        String avatar = this.uploadService.handleSaveUploadFile(file, "avatar");
+        // this.userService.handleSaveUser(thaihoc);
         return "redirect:/admin/user";
     }
 

@@ -16,7 +16,9 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private String name, decription;
+    private String name;
+
+    private String description;
 
     @OneToMany(mappedBy = "role")
     private List<User> users;
@@ -37,17 +39,17 @@ public class Role {
         this.name = name;
     }
 
-    public String getDecription() {
-        return decription;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDecription(String decription) {
-        this.decription = decription;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override
     public String toString() {
-        return "Role [id=" + id + ", name=" + name + ", decription=" + decription + "]";
+        return "Role [id=" + id + ", name=" + name + ", decription=" + description + "]";
     }
 
 }

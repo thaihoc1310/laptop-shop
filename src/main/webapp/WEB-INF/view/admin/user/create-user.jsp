@@ -13,11 +13,20 @@
                 <link href="/css/styles.css" rel="stylesheet" />
                 <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
                 <title>User</title>
-                <!-- Latest compiled and minified CSS -->
                 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
                 <!-- Latest compiled JavaScript -->
                 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
                 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+                <script>
+                    $(document).ready(() => {
+                        const avatarFile = $("#avatarFile");
+                        avatarFile.change(function (e) {
+                            const imgURL = URL.createObjectURL(e.target.files[0]);
+                            $("#avatarPreview").attr("src", imgURL);
+                            $("#avatarPreview").css({ "display": "block" });
+                        });
+                    }); 
+                </script>
             </head>
 
             <body class="sb-nav-fixed">
@@ -36,20 +45,21 @@
                                     <div class="col-12 col-md-6 mx-auto">
                                         <h2>Create a user</h2>
                                         <hr />
-                                        <form:form method="post" action="/admin/user/create" modelAttribute="newUser">
-                                            <div class="mb-3">
+                                        <form:form method="post" action="/admin/user/create" modelAttribute="newUser"
+                                            class="row" enctype="multipart/form-data">
+                                            <div class="mb-3 col-md-6">
                                                 <label class="form-label">Email:</label>
                                                 <form:input type="email" class="form-control" path="email" />
                                             </div>
-                                            <div class="mb-3">
+                                            <div class="mb-3 col-md-6">
                                                 <label class="form-label">Password:</label>
                                                 <form:input type="password" class="form-control" path="password" />
                                             </div>
-                                            <div class="mb-3">
+                                            <div class="mb-3 col-md-6">
                                                 <label class="form-label">Phone Number:</label>
                                                 <form:input type="text" class="form-control" path="phone" />
                                             </div>
-                                            <div class="mb-3">
+                                            <div class="mb-3 col-md-6">
                                                 <label class="form-label">Full Name:</label>
                                                 <form:input type="text" class="form-control" path="fullName" />
                                             </div>
@@ -57,7 +67,25 @@
                                                 <label class="form-label">Address:</label>
                                                 <form:input type="text" class="form-control" path="address" />
                                             </div>
-                                            <button type="submit" class="btn btn-primary">Create</button>
+                                            <div class="mb-3 col-md-6">
+                                                <label class="form-label">Role:</label>
+                                                <form:select class="form-select" path="role.name">
+                                                    <form:option value="ADMIN">ADMIN</form:option>
+                                                    <form:option value="USER">USER</form:option>
+                                                </form:select>
+                                            </div>
+                                            <div class="mb-3 col-md-6">
+                                                <label for="avatarFile" class="form-label">Avatar:</label>
+                                                <input id="avatarFile" class="form-control" type="file"
+                                                    accept=".png, .jpg, .jpeg" name="imageFile" />
+                                            </div>
+                                            <div class="mb-3 col-12">
+                                                <img style="max-height: 250px; display: none;" alt="avater preview"
+                                                    id="avatarPreview" />
+                                            </div>
+                                            <div class="mb-5 col-12">
+                                                <button type="submit" class="btn btn-primary">Create</button>
+                                            </div>
                                         </form:form>
                                     </div>
                                 </div>
