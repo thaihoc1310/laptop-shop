@@ -32,8 +32,9 @@
                                     <li class="breadcrumb-item "><a href="/admin">Dashboard</a></li>
                                     <li class="breadcrumb-item active">Users</li>
                                 </ol>
-                                <div class="row">
-                                    <div class="col-12 col-md-6 mx-auto ">
+                                <!-- <div class="container"> -->
+                                <div class="row d-flex justify-content-around">
+                                    <div class="col-12 col-md-7 ">
                                         <h1>User detail ${id}</h1>
                                         <hr />
                                         <div class="card">
@@ -46,18 +47,20 @@
                                                 <li class="list-group-item">Full name : ${user.fullName}</li>
                                                 <li class="list-group-item">Phone : ${user.phone}</li>
                                                 <li class="list-group-item">Address : ${user.address}</li>
-                                                <li class="list-group-item">Avatar : <div class="mt-2">
-                                                        <img src="${imagePath}"
-                                                            style="max-height: 250px; display: 'block';" />
-                                                    </div>
-                                                </li>
                                             </ul>
                                         </div>
                                         <div class="mb-5">
                                             <a href="/admin/user" class="btn btn-success mt-3">Back</a>
                                         </div>
                                     </div>
+                                    <div class=" col-12 col-md-3 " style="margin-top: 4.7rem;">
+                                        <img src="${imagePath}" style="max-height: 250px; display: 'block';"
+                                            class="rounded mx-auto d-block" />
+                                    </div>
+
                                 </div>
+                                <!-- </div> -->
+
                             </div>
                         </main>
                         <jsp:include page="../layout/footer.jsp" />
