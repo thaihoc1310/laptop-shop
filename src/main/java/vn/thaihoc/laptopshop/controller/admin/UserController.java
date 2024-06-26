@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 
 import vn.thaihoc.laptopshop.domain.User;
 import vn.thaihoc.laptopshop.service.UploadService;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+
+import jakarta.validation.Valid;
 
 @Controller
 public class UserController {
@@ -63,8 +66,12 @@ public class UserController {
     }
 
     @PostMapping(value = "/admin/user/create")
-    public String postcreateUser(Model model, @ModelAttribute("newUser") User thaihoc,
+    public String postcreateUserPage(Model model, @ModelAttribute("newUser") @Valid User thaihoc,
+            BindingResult bindingResult,
             @RequestParam("imageFile") MultipartFile file) {
+
+        // validate
+
         String avatar = this.uploadService.handleSaveUploadFile(file, "avatar");
         String hashPassword = this.passwordEncoder.encode(thaihoc.getPassword());
         thaihoc.setAvatar(avatar);
