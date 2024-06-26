@@ -26,7 +26,12 @@
                             $("#avatarPreview").attr("src", imgURL);
                             $("#avatarPreview").css({ "display": "block" });
                         });
-                    }); 
+                    });
+
+                    var imagePath = '${imagePath}';
+                    if (imagePath !== "") {
+                        $("#avatarPreview").css({ "display": "block" });
+                    }
                 </script>
             </head>
 
@@ -82,8 +87,8 @@
                                                 </form:select>
                                             </div>
                                             <div class="mb-3 col-12">
-                                                <img src="${imagePath}" style="max-height: 250px; display: 'block';"
-                                                    alt="avater preview" id="avatarPreview" />
+                                                <img src="${imagePath}" style="max-height: 250px; display: none;"
+                                                    alt="avatar" id="avatarPreview" />
                                             </div>
                                             <div class="mb-5 col-12">
                                                 <button type="submit" class="btn btn-warning">Update</button>

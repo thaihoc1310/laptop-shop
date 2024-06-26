@@ -6,6 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 
 import vn.thaihoc.laptopshop.domain.User;
 import vn.thaihoc.laptopshop.service.UploadService;
@@ -33,16 +34,6 @@ public class UserController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    // @GetMapping("/")
-    // public String getHomepage(Model model) {
-    // List<User> arrUsers =
-    // this.userService.getAllUsersByEmail("thaihoc131005@gmail.com");
-    // System.out.println(arrUsers);
-    // model.addAttribute("test", "test");
-    // model.addAttribute("test2", "from controller with model");
-    // return "hello";
-    // }
-
     @GetMapping("/admin/user")
     public String getUserPage(Model model) {
         List<User> users = this.userService.getAllUsers();
@@ -67,11 +58,17 @@ public class UserController {
 
     @PostMapping(value = "/admin/user/create")
     public String postcreateUserPage(Model model, @ModelAttribute("newUser") @Valid User thaihoc,
-            BindingResult bindingResult,
+            BindingResult newUserBindingResult,
             @RequestParam("imageFile") MultipartFile file) {
+        List<FieldError> errors = newUserBindingResult.getFieldErrors();
+        for (FieldError error : errors) {
+            System.out.println(error.getField() + " - " + error.getDefaultMessage());
+        }
 
         // validate
-
+        if (newUserBindingResult.hasErrors()) {
+            return "/admin/user/create-user";
+        }
         String avatar = this.uploadService.handleSaveUploadFile(file, "avatar");
         String hashPassword = this.passwordEncoder.encode(thaihoc.getPassword());
         thaihoc.setAvatar(avatar);
@@ -85,7 +82,6 @@ public class UserController {
     public String getUpdateUserPage(Model model, @PathVariable long id) {
         User user = this.userService.getUserById(id);
         model.addAttribute("user-update", user);
-        System.out.println(this.uploadService.getAbsolutePath("avatar", user.getAvatar()));
         model.addAttribute("imagePath", this.uploadService.getAbsolutePath("avatar", user.getAvatar()));
         return "/admin/user/update-user";
     }

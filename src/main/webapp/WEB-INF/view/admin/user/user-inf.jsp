@@ -18,6 +18,12 @@
                 <!-- Latest compiled JavaScript -->
                 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
                 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+                <script>
+                    var imagePath = '${imagePath}';
+                    if (imagePath !== "") {
+                        $("#avatarPreview").css({ "display": "block" });
+                    }
+                </script>
             </head>
 
             <body class="sb-nav-fixed">
@@ -54,7 +60,7 @@
                                         </div>
                                     </div>
                                     <div class=" col-12 col-md-3 " style="margin-top: 4.7rem;">
-                                        <img src="${imagePath}" style="max-height: 250px; display: 'block';"
+                                        <img src="${imagePath}" style="max-height: 250px; display: 'none';"
                                             class="rounded mx-auto d-block" />
                                     </div>
 
