@@ -19,7 +19,15 @@
                 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
                 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
                 <script>
+
                     $(document).ready(() => {
+
+                        const imagePath = '${imagePath}';
+                        if (imagePath !== "") {
+                            $("#avatarPreview").attr("src", imagePath);
+                            $("#avatarPreview").css({ "display": "block" });
+                        }
+
                         const avatarFile = $("#avatarFile");
                         avatarFile.change(function (e) {
                             const imgURL = URL.createObjectURL(e.target.files[0]);
@@ -28,10 +36,7 @@
                         });
                     });
 
-                    var imagePath = '${imagePath}';
-                    if (imagePath !== "") {
-                        $("#avatarPreview").css({ "display": "block" });
-                    }
+
                 </script>
             </head>
 
@@ -53,6 +58,9 @@
                                         <hr />
                                         <form:form method="post" action="/admin/user/update"
                                             modelAttribute="user-update" class="row" enctype="multipart/form-data">
+                                            <c:set var="errorFullname">
+                                                <form:errors path="fullName" cssClass="invalid-feedback" />
+                                            </c:set>
                                             <div class="mb-3" style="display: none;">
                                                 <label class="form-label">Id:</label>
                                                 <form:input type="Number" class="form-control" path="id" />
@@ -68,7 +76,10 @@
                                             </div>
                                             <div class="mb-3 col-md-6">
                                                 <label class="form-label">Full Name:</label>
-                                                <form:input type="text" class="form-control" path="fullName" />
+                                                <form:input type="text"
+                                                    class="form-control ${not empty errorFullname ? 'is-invalid' : ''}"
+                                                    path="fullName" />
+                                                ${errorFullname}
                                             </div>
                                             <div class="mb-3">
                                                 <label class="form-label">Address:</label>
@@ -87,8 +98,7 @@
                                                 </form:select>
                                             </div>
                                             <div class="mb-3 col-12">
-                                                <img src="${imagePath}" style="max-height: 250px; display: none;"
-                                                    alt="avatar" id="avatarPreview" />
+                                                <img style="max-height: 250px; display: 'none';" id="avatarPreview" />
                                             </div>
                                             <div class="mb-5 col-12">
                                                 <button type="submit" class="btn btn-warning">Update</button>

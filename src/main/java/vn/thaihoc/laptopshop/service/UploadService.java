@@ -50,10 +50,10 @@ public class UploadService {
         return finalName;
     }
 
-    public String getAbsolutePath(String targetFolder, String userAvatar) {
-        if (userAvatar.equals(""))
+    public String getAbsolutePath(String targetFolder, String fileImage) {
+        if (fileImage.equals(""))
             return "";
-        return "/images" + File.separator + targetFolder + File.separator
-                + userAvatar;
+        return "/images/" + targetFolder + '/'
+                + fileImage;
     }
 }

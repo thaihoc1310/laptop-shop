@@ -57,7 +57,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/admin/user/create")
-    public String postcreateUserPage(Model model, @ModelAttribute("newUser") @Valid User thaihoc,
+    public String postCreateUserPage(Model model, @ModelAttribute("newUser") @Valid User thaihoc,
             BindingResult newUserBindingResult,
             @RequestParam("imageFile") MultipartFile file) {
         List<FieldError> errors = newUserBindingResult.getFieldErrors();
@@ -87,8 +87,12 @@ public class UserController {
     }
 
     @PostMapping("/admin/user/update")
-    public String postUpdateUserDetail(Model model, @ModelAttribute("user-update") User thaihoc,
+    public String postUpdateUserDetail(Model model, @ModelAttribute("user-update") @Valid User thaihoc,
+            BindingResult userBindingResult,
             @RequestParam("imageFile") MultipartFile file) {
+        if (userBindingResult.hasErrors()) {
+            return "/admin/user/update-user";
+        }
         User userUpdate = this.userService.getUserById(thaihoc.getId());
         if (!userUpdate.equals(null)) {
             userUpdate.setFullName(thaihoc.getFullName());
