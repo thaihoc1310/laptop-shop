@@ -19,5 +19,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     User findOneById(long id);
 
+    Boolean existsByEmail(String email);
     // thuc te one voi all khong co tac dung , kieu du lieu tra ve moi co tac dung
 }

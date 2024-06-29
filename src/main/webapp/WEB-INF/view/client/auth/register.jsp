@@ -29,13 +29,25 @@
                                             <div class="card-body">
                                                 <form:form method="post" action="/register"
                                                     modelAttribute="registerUser">
+                                                    <c:set var="errorPassword">
+                                                        <form:errors path="confirmPassword"
+                                                            cssClass="invalid-feedback" />
+                                                    </c:set>
+                                                    <c:set var="errorEmail">
+                                                        <form:errors path="email" cssClass="invalid-feedback" />
+                                                    </c:set>
+                                                    <c:set var="errorFirstName">
+                                                        <form:errors path="firstName" cssClass="invalid-feedback" />
+                                                    </c:set>
                                                     <div class="row mb-3">
                                                         <div class="col-md-6">
                                                             <div class="form-floating mb-3 mb-md-0">
-                                                                <form:input path="firstName" class="form-control"
+                                                                <form:input path="firstName"
+                                                                    class="form-control ${not empty errorFirstName ? 'is-invalid' : ''}"
                                                                     id="inputFirstName" type="text"
                                                                     placeholder="Enter your first name" />
                                                                 <label for="inputFirstName">First name</label>
+                                                                ${errorFirstName}
                                                             </div>
                                                         </div>
                                                         <div class="col-md-6">
@@ -48,17 +60,22 @@
                                                         </div>
                                                     </div>
                                                     <div class="form-floating mb-3">
-                                                        <form:input path="email" class="form-control" id="inputEmail"
-                                                            type="email" placeholder="name@example.com" />
+                                                        <form:input path="email"
+                                                            class="form-control  ${not empty errorEmail ? 'is-invalid' : ''}"
+                                                            id="inputEmail" type="email"
+                                                            placeholder="name@example.com" />
                                                         <label for="inputEmail">Email address</label>
+                                                        ${errorEmail}
                                                     </div>
                                                     <div class="row mb-3">
                                                         <div class="col-md-6">
                                                             <div class="form-floating mb-3 mb-md-0">
-                                                                <form:input path="password" class="form-control"
+                                                                <form:input path="password"
+                                                                    class="form-control ${not empty errorPassword ? 'is-invalid' : ''}"
                                                                     id="inputPassword" type="password"
                                                                     placeholder="Create a password" />
                                                                 <label for="inputPassword">Password</label>
+                                                                ${errorPassword}
                                                             </div>
                                                         </div>
                                                         <div class="col-md-6">
