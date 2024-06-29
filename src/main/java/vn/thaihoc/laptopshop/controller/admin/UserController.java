@@ -56,7 +56,7 @@ public class UserController {
         return "/admin/user/create-user";
     }
 
-    @PostMapping(value = "/admin/user/create")
+    @PostMapping("/admin/user/create")
     public String postCreateUserPage(Model model, @ModelAttribute("newUser") @Valid User thaihoc,
             BindingResult newUserBindingResult,
             @RequestParam("imageFile") MultipartFile file) {
