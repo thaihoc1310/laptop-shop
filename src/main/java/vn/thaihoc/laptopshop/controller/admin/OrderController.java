@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class OrderController {
     @GetMapping("/admin/order")
     public String getOrder() {
-        return "/admin/order/order_view";
+        return "admin/order/order_view";
     }
 }

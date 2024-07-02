@@ -27,8 +27,7 @@ public class UserController {
     private final UploadService uploadService;
     private final PasswordEncoder passwordEncoder;
 
-    public UserController(UserService userService, UploadService uploadService,
-            PasswordEncoder passwordEncoder) {
+    public UserController(UserService userService, UploadService uploadService, PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.uploadService = uploadService;
         this.passwordEncoder = passwordEncoder;
@@ -38,7 +37,7 @@ public class UserController {
     public String getUserPage(Model model) {
         List<User> users = this.userService.getAllUsers();
         model.addAttribute("users1", users);
-        return "/admin/user/user_view";
+        return "admin/user/user_view";
     }
 
     @GetMapping("/admin/user/{id}")
@@ -47,13 +46,13 @@ public class UserController {
         model.addAttribute("id", id);
         model.addAttribute("user", user);
         model.addAttribute("imagePath", this.uploadService.getAbsolutePath("avatar", user.getAvatar()));
-        return "/admin/user/user-inf";
+        return "admin/user/user-inf";
     }
 
     @GetMapping("/admin/user/create")
     public String getCreateUserPage(Model model) {
         model.addAttribute("newUser", new User());
-        return "/admin/user/create-user";
+        return "admin/user/create-user";
     }
 
     @PostMapping("/admin/user/create")
@@ -67,7 +66,7 @@ public class UserController {
 
         // validate
         if (newUserBindingResult.hasErrors()) {
-            return "/admin/user/create-user";
+            return "admin/user/create-user";
         }
         String avatar = this.uploadService.handleSaveUploadFile(file, "avatar");
         String hashPassword = this.passwordEncoder.encode(thaihoc.getPassword());
@@ -83,7 +82,7 @@ public class UserController {
         User user = this.userService.getUserById(id);
         model.addAttribute("user-update", user);
         model.addAttribute("imagePath", this.uploadService.getAbsolutePath("avatar", user.getAvatar()));
-        return "/admin/user/update-user";
+        return "admin/user/update-user";
     }
 
     @PostMapping("/admin/user/update")
@@ -91,7 +90,7 @@ public class UserController {
             BindingResult userBindingResult,
             @RequestParam("imageFile") MultipartFile file) {
         if (userBindingResult.hasErrors()) {
-            return "/admin/user/update-user";
+            return "admin/user/update-user";
         }
         User userUpdate = this.userService.getUserById(thaihoc.getId());
         if (!userUpdate.equals(null)) {
@@ -112,7 +111,7 @@ public class UserController {
     public String getDeleteUserPage(Model model, @PathVariable long id) {
         model.addAttribute("id", id);
         model.addAttribute("user-delete", new User());
-        return "/admin/user/delete-user";
+        return "admin/user/delete-user";
     }
 
     @PostMapping("/admin/user/delete")

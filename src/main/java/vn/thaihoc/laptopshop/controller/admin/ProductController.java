@@ -34,20 +34,20 @@ public class ProductController {
     public String getProduct(Model model) {
         List<Product> products = this.productService.getAllProducts();
         model.addAttribute("products1", products);
-        return "/admin/product/product_view";
+        return "admin/product/product_view";
     }
 
     @GetMapping("/admin/product/create")
     public String getCreateProductPage(Model model) {
         model.addAttribute("newProduct", new Product());
-        return "/admin/product/create-product";
+        return "admin/product/create-product";
     }
 
     @PostMapping("/admin/product/create")
     public String getPostProduct(Model model, @ModelAttribute("newProduct") @Valid Product newProduct,
             BindingResult newProductBindingResult, @RequestParam("imageFile") MultipartFile file) {
         if (newProductBindingResult.hasErrors()) {
-            return "/admin/product/create-product";
+            return "admin/product/create-product";
         }
         List<FieldError> errors = newProductBindingResult.getFieldErrors();
         for (FieldError error : errors) {
@@ -66,14 +66,14 @@ public class ProductController {
         model.addAttribute("id", id);
         model.addAttribute("product", product);
         model.addAttribute("imagePath", this.uploadService.getAbsolutePath("product", product.getImage()));
-        return "/admin/product/product-inf";
+        return "admin/product/product-inf";
     }
 
     @GetMapping("/admin/product/delete/{id}")
     public String getDeleteProductPage(Model model, @PathVariable long id) {
         model.addAttribute("id", id);
         model.addAttribute("product-delete", new Product());
-        return "/admin/product/delete-product";
+        return "admin/product/delete-product";
     }
 
     @PostMapping("/admin/product/delete")
@@ -88,7 +88,7 @@ public class ProductController {
         model.addAttribute("product-update", product);
         System.out.println(product);
         model.addAttribute("imagePath", this.uploadService.getAbsolutePath("product", product.getImage()));
-        return "/admin/product/update-product";
+        return "admin/product/update-product";
     }
 
     @PostMapping("/admin/product/update")
@@ -96,7 +96,7 @@ public class ProductController {
             BindingResult productBindingResult,
             @RequestParam("imageFile") MultipartFile file) {
         if (productBindingResult.hasErrors()) {
-            return "/admin/product/update-product";
+            return "admin/product/update-product";
         }
         Product productUpdate = this.productService.getProductById(thaihoc.getId());
         if (!productUpdate.equals(null)) {
