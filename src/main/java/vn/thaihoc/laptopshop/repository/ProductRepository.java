@@ -15,7 +15,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     List<Product> findAll();
 
-    Product findOneById(long id);
+    Product findProductById(long id);
 
     // thuc te one voi all khong co tac dung , kieu du lieu tra ve moi co tac dung
 }

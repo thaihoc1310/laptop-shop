@@ -6,6 +6,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import vn.thaihoc.laptopshop.service.ProductService;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class ItemController {
@@ -19,6 +23,14 @@ public class ItemController {
     public String getMethodName(Model model, @PathVariable long id) {
         model.addAttribute("product", this.productService.getProductById(id));
         return "client/product/product_detail";
+    }
+
+    @PostMapping("/add-product-to-cart/{id}")
+    public String addProductToCart(@PathVariable long id, HttpServletRequest request) {
+        long productId = id;
+        HttpSession session = request.getSession(false);
+        this.productService.handleAddProductToCart((String) session.getAttribute("email"), productId);
+        return "redirect:/";
     }
 
 }
