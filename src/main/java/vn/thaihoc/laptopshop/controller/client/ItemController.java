@@ -1,11 +1,20 @@
 package vn.thaihoc.laptopshop.controller.client;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import vn.thaihoc.laptopshop.domain.Cart;
+import vn.thaihoc.laptopshop.domain.CartDetail;
+import vn.thaihoc.laptopshop.domain.Product;
+import vn.thaihoc.laptopshop.domain.User;
 import vn.thaihoc.laptopshop.service.ProductService;
+import vn.thaihoc.laptopshop.service.UserService;
+
 import org.springframework.web.bind.annotation.PostMapping;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,9 +23,11 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class ItemController {
     private final ProductService productService;
+    private final UserService userService;
 
-    public ItemController(ProductService productService) {
+    public ItemController(ProductService productService, UserService userService) {
         this.productService = productService;
+        this.userService = userService;
     }
 
     @GetMapping("/product/{id}")
@@ -34,8 +45,18 @@ public class ItemController {
     }
 
     @GetMapping("/cart")
-    public String getCartPage(Model model) {
+    public String getCartPage(Model model, HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        User user = this.userService.getUserByEmail((String) session.getAttribute("email"));
 
+        List<CartDetail> cartDetails = new ArrayList<>();
+        if (user.getCart() != null)
+            cartDetails = user.getCart().getCartDetails();
+        double totalPrice = 0;
+        for (CartDetail cd : cartDetails)
+            totalPrice += cd.getPrice() * cd.getQuantity();
+        model.addAttribute("cartDetails", cartDetails);
+        model.addAttribute("totalPrice", totalPrice);
         return "client/cart/cart_view";
     }
 }

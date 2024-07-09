@@ -25,7 +25,7 @@
                                 data-bs-toggle="modal" data-bs-target="#searchModal"><i
                                     class="fas fa-search text-primary"></i></button> -->
 
-                                <a href="#" class="position-relative me-4 my-auto">
+                                <a href="/cart" class="position-relative me-4 my-auto">
                                     <i class="fa fa-shopping-bag fa-2x"></i>
                                     <c:if test="${sessionScope.sum != 0}">
                                         <span
