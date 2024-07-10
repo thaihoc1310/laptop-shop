@@ -65,4 +65,12 @@ public class OrderDetail {
         return "OrderDetail [id=" + id + ", quantity=" + quantity + ", price=" + price + ", order=" + order + "]";
     }
 
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
 }
