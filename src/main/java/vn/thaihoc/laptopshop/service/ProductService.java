@@ -107,4 +107,15 @@ public class ProductService {
 
         }
     }
+
+    public void handleConfirmCheckout(List<CartDetail> cartDetails) {
+        for (CartDetail cd : cartDetails) {
+            Optional<CartDetail> cartDetail = this.cartDetailRepository.findById(cd.getId());
+            if (cartDetail.isPresent()) {
+                CartDetail curCartDetail = cartDetail.get();
+                curCartDetail.setQuantity(cd.getQuantity());
+                this.cartDetailRepository.save(curCartDetail);
+            }
+        }
+    }
 }

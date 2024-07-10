@@ -149,13 +149,20 @@
         const input = button.parent().parent().find('input');
         input.val(newVal);
 
+        //set form index
+        const index = input.attr("data-cart-detail-index");
+        const el = document.getElementById(`cartDetails${index}.quantity`);
+        console.log(el);
+        console.log(newVal);
+        $(el).val(newVal);
+
         //get price
         const price = input.attr("data-cart-detail-price");
         const id = input.attr("data-cart-detail-id");
-
+        const preVal = input.attr("previous-quantity")
         const priceElement = $(`p[data-cart-detail-id='${id}']`);
         if (priceElement) {
-            const newPrice = +price * newVal;
+            var newPrice = +price * newVal;
             priceElement.text(formatCurrency(newPrice.toFixed(2)) + " đ");
         }
 
@@ -168,7 +175,11 @@
             if (change === 0) {
                 newTotal = +currentTotal;
             } else {
-                newTotal = change * (+price) + (+currentTotal);
+                newTotal = newPrice - (+preVal) * (+price) + (+currentTotal);
+                // console.log(newTotal);
+                // console.log(newPrice);
+                // console.log(oldValue * (+price));
+                input.attr("previous-quantity", newVal);
             }
 
             //reset change
