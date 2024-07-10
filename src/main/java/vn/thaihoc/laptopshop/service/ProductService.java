@@ -1,6 +1,7 @@
 package vn.thaihoc.laptopshop.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -87,5 +88,23 @@ public class ProductService {
             }
         }
 
+    }
+
+    public void handleRemoveCartDetail(long cartDetailId, HttpSession session) {
+        Optional<CartDetail> cartDetail = this.cartDetailRepository.findById(cartDetailId);
+        if (cartDetail.isPresent()) {
+            CartDetail curcartDetail = cartDetail.get();
+            this.cartDetailRepository.deleteById(cartDetailId);
+            Cart cart = curcartDetail.getCart();
+            long sum = cart.getSum() - 1;
+            if (sum == 0) {
+                this.cartRepository.deleteById(cart.getId());
+            } else {
+                cart.setSum(sum);
+                this.cartRepository.save(cart);
+            }
+            session.setAttribute("sum", sum);
+
+        }
     }
 }

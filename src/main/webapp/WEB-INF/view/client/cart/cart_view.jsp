@@ -69,6 +69,14 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <c:if test="${empty cartDetails}">
+                                        <tr>
+                                            <td colspan="6" class="text-center">
+                                                <p>Không có sản phẩm nào trong giỏ hàng
+                                                </p>
+                                            </td>
+                                        </tr>
+                                    </c:if>
 
                                     <c:forEach var="cartDetail" items="${cartDetails}">
                                         <tr>
@@ -99,7 +107,9 @@
                                                     </div>
                                                     <input type="text"
                                                         class="form-control form-control-sm text-center border-0"
-                                                        value="${cartDetail.quantity}">
+                                                        value="${cartDetail.quantity}"
+                                                        data-cart-detail-id="${cartDetail.id}"
+                                                        data-cart-detail-price="${cartDetail.price}">
                                                     <div class="input-group-btn">
                                                         <button
                                                             class="btn btn-sm btn-plus rounded-circle bg-light border">
@@ -109,16 +119,22 @@
                                                 </div>
                                             </td>
                                             <td>
-                                                <p class="mb-0 mt-4">
+                                                <p class="mb-0 mt-4" data-cart-detail-id="${cartDetail.id}">
                                                     <fmt:formatNumber value="${cartDetail.price*cartDetail.quantity}"
                                                         type="number" /> đ
                                                 </p>
 
                                             </td>
                                             <td>
-                                                <button class="btn btn-md rounded-circle bg-light border mt-4">
-                                                    <i class="fa fa-times text-danger"></i>
-                                                </button>
+                                                <form action="/delete-cart-product/${cartDetail.id}" method="post">
+                                                    <button class="btn btn-md rounded-circle bg-light border mt-4">
+                                                        <i class="fa fa-times text-danger"></i>
+                                                    </button>
+                                                    <div>
+                                                        <input type="hidden" name="${_csrf.parameterName}"
+                                                            value="${_csrf.token}" />
+                                                    </div>
+                                                </form>
                                             </td>
 
                                         </tr>
@@ -126,37 +142,39 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="row g-4 justify-content-start mt-3">
-                            <div class="col-md-8 col-12 ">
-                                <div class="bg-light rounded">
-                                    <div class="p-4">
-                                        <h1 class="display-6 mb-4">Thông tin <span class="fw-normal">Đơn Hàng</span>
-                                        </h1>
-                                        <div class="d-flex justify-content-between mb-4">
-                                            <h5 class="mb-0 me-4">Tạm tính:</h5>
-                                            <p class="mb-0">
+                        <c:if test="${not empty cartDetails}">
+                            <div class="row g-4 justify-content-start mt-3">
+                                <div class="col-md-8 col-12 ">
+                                    <div class="bg-light rounded">
+                                        <div class="p-4">
+                                            <h1 class="display-6 mb-4">Thông tin <span class="fw-normal">Đơn Hàng</span>
+                                            </h1>
+                                            <div class="d-flex justify-content-between mb-4">
+                                                <h5 class="mb-0 me-4">Tạm tính:</h5>
+                                                <p class="mb-0" data-cart-total-price="${totalPrice}">
+                                                    <fmt:formatNumber value="${totalPrice}" type="number" /> đ
+                                                </p>
+                                            </div>
+                                            <div class="d-flex justify-content-between">
+                                                <h5 class="mb-0 me-4">Phí vận chuyển</h5>
+                                                <div class="">
+                                                    <p class="mb-0">0 đ</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="py-4 mb-4 border-top border-bottom d-flex justify-content-between">
+                                            <h5 class="mb-0 ps-4 me-4">Tổng số tiền</h5>
+                                            <p class="mb-0 pe-4" data-cart-total-price="${totalPrice}">
                                                 <fmt:formatNumber value="${totalPrice}" type="number" /> đ
                                             </p>
                                         </div>
-                                        <div class="d-flex justify-content-between">
-                                            <h5 class="mb-0 me-4">Phí vận chuyển</h5>
-                                            <div class="">
-                                                <p class="mb-0">0 đ</p>
-                                            </div>
-                                        </div>
+                                        <button
+                                            class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4"
+                                            type="button">XÁC NHẬN ĐẶT HÀNG</button>
                                     </div>
-                                    <div class="py-4 mb-4 border-top border-bottom d-flex justify-content-between">
-                                        <h5 class="mb-0 ps-4 me-4">Tổng số tiền</h5>
-                                        <p class="mb-0 pe-4">
-                                            <fmt:formatNumber value="${totalPrice}" type="number" /> đ
-                                        </p>
-                                    </div>
-                                    <button
-                                        class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4"
-                                        type="button">XÁC NHẬN ĐẶT HÀNG</button>
                                 </div>
                             </div>
-                        </div>
+                        </c:if>
                     </div>
                 </div>
                 <!-- Cart Page End -->

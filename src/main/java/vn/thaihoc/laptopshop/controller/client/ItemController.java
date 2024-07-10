@@ -59,4 +59,12 @@ public class ItemController {
         model.addAttribute("totalPrice", totalPrice);
         return "client/cart/cart_view";
     }
+
+    @PostMapping("/delete-cart-product/{id}")
+    public String deleteProductFromCart(@PathVariable long id, HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        this.productService.handleRemoveCartDetail(id, session);
+
+        return "redirect:/cart";
+    }
 }
