@@ -58,6 +58,10 @@ public class ProductService {
         return this.cartDetailRepository.findAllByCart(cart);
     }
 
+    public long countProducts() {
+        return this.productRepository.count();
+    }
+
     public void handleAddProductToCart(String email, long productId, HttpSession session) {
         User user = this.userService.getUserByEmail(email);
         if (user != null) {
