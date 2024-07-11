@@ -69,9 +69,6 @@ public class ProductService {
                 this.cartRepository.save(cart);
             }
 
-            // save cart_detail
-            // find prooduct by id
-
             Product product = this.productRepository.findProductById(productId);
             if (product != null) {
                 CartDetail cartDetail = this.cartDetailRepository.findByCartAndProduct(cart, product);

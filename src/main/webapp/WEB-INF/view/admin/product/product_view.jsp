@@ -30,9 +30,9 @@
                                 <h1 class="mt-4">Manage Products</h1>
                                 <ol class="breadcrumb mb-4">
                                     <li class="breadcrumb-item "><a href="/admin">Dashboard</a></li>
-                                    <li class="breadcrumb-item active">Product</li>
+                                    <li class="breadcrumb-item active">Products</li>
                                 </ol>
-                                <div class="row">
+                                <div class="row ">
                                     <div class="col-12  mx-auto">
                                         <div class="d-flex justify-content-between">
                                             <h3>Table products</h3>

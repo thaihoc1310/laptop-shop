@@ -50,11 +50,12 @@
                                 <h1 class="mt-4">Manage Users</h1>
                                 <ol class="breadcrumb mb-4">
                                     <li class="breadcrumb-item "><a href="/admin">Dashboard</a></li>
-                                    <li class="breadcrumb-item active">Users</li>
+                                    <li class="breadcrumb-item active"><a href="/admin/user">Users</a></li>
+                                    <li class="breadcrumb-item active">Update</li>
                                 </ol>
-                                <div class="row">
+                                <div class="row mt-5">
                                     <div class="col-12 col-md-6 mx-auto">
-                                        <h1>Update a user</h1>
+                                        <h2>Update a user</h2>
                                         <hr />
                                         <form:form method="post" action="/admin/user/update"
                                             modelAttribute="user-update" class="row" enctype="multipart/form-data">

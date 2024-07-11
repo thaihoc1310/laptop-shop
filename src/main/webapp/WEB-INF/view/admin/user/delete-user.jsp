@@ -30,11 +30,12 @@
                                 <h1 class="mt-4">Manage Users</h1>
                                 <ol class="breadcrumb mb-4">
                                     <li class="breadcrumb-item "><a href="/admin">Dashboard</a></li>
-                                    <li class="breadcrumb-item active">Users</li>
+                                    <li class="breadcrumb-item active"><a href="/admin/user">Users</a></li>
+                                    <li class="breadcrumb-item active">Delete</li>
                                 </ol>
-                                <div class="row">
+                                <div class="row mt-5">
                                     <div class="col-12 col-md-6 mx-auto">
-                                        <h1>Delete the user with id = ${id}</h1>
+                                        <h2>Delete the user with id = ${id}</h2>
                                         <hr />
                                         <div class="alert alert-danger">Are you sure to delete the user ?</div>
                                         <form:form method="post" action="/admin/user/delete"

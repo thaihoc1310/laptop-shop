@@ -30,11 +30,12 @@
                                 <h1 class="mt-4">Manage Products</h1>
                                 <ol class="breadcrumb mb-4">
                                     <li class="breadcrumb-item "><a href="/admin">Dashboard</a></li>
-                                    <li class="breadcrumb-item active">Products</li>
+                                    <li class="breadcrumb-item active"><a href="/admin/product">Products</a></li>
+                                    <li class="breadcrumb-item active">Delete</li>
                                 </ol>
-                                <div class="row">
+                                <div class="row mt-5">
                                     <div class="col-12 col-md-6 mx-auto">
-                                        <h1>Delete the user with id = ${id}</h1>
+                                        <h2>Delete product with id = ${id}</h2>
                                         <hr />
                                         <div class="alert alert-danger">Are you sure to delete this product ?</div>
                                         <form:form method="post" action="/admin/product/delete"

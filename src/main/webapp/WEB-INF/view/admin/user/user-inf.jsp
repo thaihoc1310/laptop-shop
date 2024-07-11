@@ -36,12 +36,13 @@
                                 <h1 class="mt-4">Manage Users</h1>
                                 <ol class="breadcrumb mb-4">
                                     <li class="breadcrumb-item "><a href="/admin">Dashboard</a></li>
-                                    <li class="breadcrumb-item active">Users</li>
+                                    <li class="breadcrumb-item active"><a href="/admin/user">Users</a></li>
+                                    <li class="breadcrumb-item active">View Detail</li>
                                 </ol>
                                 <!-- <div class="container"> -->
-                                <div class="row d-flex justify-content-around">
+                                <div class="row d-flex justify-content-around mt-5">
                                     <div class="col-12 col-md-7 ">
-                                        <h1>User detail ${id}</h1>
+                                        <h3>User detail ${id}</h3>
                                         <hr />
                                         <div class="card">
                                             <div class="card-header">
@@ -59,7 +60,7 @@
                                             <a href="/admin/user" class="btn btn-success mt-3">Back</a>
                                         </div>
                                     </div>
-                                    <div class=" col-12 col-md-3 " style="margin-top: 4.7rem;">
+                                    <div class=" col-12 col-md-3 " style="margin-top: 4.3rem;">
                                         <img src="${imagePath}" style="max-height: 250px; display: 'none';"
                                             class="rounded mx-auto d-block" />
                                     </div>
