@@ -111,7 +111,6 @@
                                                             value="${cartDetail.quantity}"
                                                             data-cart-detail-id="${cartDetail.id}"
                                                             data-cart-detail-price="${cartDetail.price}"
-                                                            previous-quantity="${cartDetail.quantity}"
                                                             data-cart-detail-index="${status.index}">
                                                         <div class="input-group-btn">
                                                             <button

@@ -152,14 +152,12 @@
         //set form index
         const index = input.attr("data-cart-detail-index");
         const el = document.getElementById(`cartDetails${index}.quantity`);
-        console.log(el);
-        console.log(newVal);
         $(el).val(newVal);
 
         //get price
         const price = input.attr("data-cart-detail-price");
         const id = input.attr("data-cart-detail-id");
-        const preVal = input.attr("previous-quantity")
+        const preVal = input.attr("value")
         const priceElement = $(`p[data-cart-detail-id='${id}']`);
         if (priceElement) {
             var newPrice = +price * newVal;
@@ -169,6 +167,7 @@
         //update total cart price
         const totalPriceElement = $(`p[data-cart-total-price]`);
 
+        input.attr("value", newVal);
         if (totalPriceElement && totalPriceElement.length) {
             const currentTotal = totalPriceElement.first().attr("data-cart-total-price");
             let newTotal = +currentTotal;
@@ -179,12 +178,10 @@
                 // console.log(newTotal);
                 // console.log(newPrice);
                 // console.log(oldValue * (+price));
-                input.attr("previous-quantity", newVal);
             }
 
             //reset change
             change = 0;
-
             //update
             totalPriceElement?.each(function (index, element) {
                 //update text
@@ -195,6 +192,25 @@
             });
         }
     });
+
+    // $('.quantitychange button').on('click', function () {
+    //     var button = $(this);
+    //     var oldValue = button.parent().parent().find('input').val();
+    //     console.log(oldValue);
+    //     if (button.hasClass('btn-plus')) {
+    //         var newVal = parseFloat(oldValue) + 1;
+    //     }
+    //     if (button.hasClass('btn-minus')) {
+    //         if (oldValue > 1) {
+    //             var newVal = parseFloat(oldValue) - 1;
+    //         } else {
+    //             newVal = 1;
+    //         }
+    //     }
+    //     const input = button.parent().parent().find('input');
+    //     input.val(newVal);
+    //     input.attr("value", newVal);
+    // });
 
     function formatCurrency(value) {
         // Use the 'vi-VN' locale to format the number according to Vietnamese currency format

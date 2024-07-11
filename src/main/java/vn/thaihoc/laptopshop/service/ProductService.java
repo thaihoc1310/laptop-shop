@@ -8,8 +8,6 @@ import org.springframework.stereotype.Service;
 import jakarta.servlet.http.HttpSession;
 import vn.thaihoc.laptopshop.domain.Cart;
 import vn.thaihoc.laptopshop.domain.CartDetail;
-import vn.thaihoc.laptopshop.domain.Order;
-import vn.thaihoc.laptopshop.domain.OrderDetail;
 import vn.thaihoc.laptopshop.domain.Product;
 import vn.thaihoc.laptopshop.domain.User;
 import vn.thaihoc.laptopshop.repository.CartDetailRepository;
@@ -62,7 +60,7 @@ public class ProductService {
         return this.productRepository.count();
     }
 
-    public void handleAddProductToCart(String email, long productId, HttpSession session) {
+    public void handleAddProductToCart(String email, long productId, HttpSession session, long addquantity) {
         User user = this.userService.getUserByEmail(email);
         if (user != null) {
             Cart cart = this.cartRepository.findCartByUser(user);
@@ -81,16 +79,16 @@ public class ProductService {
                     cartDetail.setCart(cart);
                     cartDetail.setProduct(product);
                     cartDetail.setPrice(product.getPrice());
-                    cartDetail.setQuantity(1);
+                    cartDetail.setQuantity(addquantity);
 
                     // update cart sum
-                    long sum = cart.getSum() + 1;
+                    long sum = cart.getSum() + addquantity;
                     cart.setSum(sum);
                     this.cartRepository.save(cart);
                     session.setAttribute("sum", sum);
                 } else {
                     cartDetail = this.cartDetailRepository.findByCartAndProduct(cart, product);
-                    cartDetail.setQuantity(cartDetail.getQuantity() + 1);
+                    cartDetail.setQuantity(cartDetail.getQuantity() + addquantity);
                 }
                 this.cartDetailRepository.save(cartDetail);
             }
@@ -127,38 +125,4 @@ public class ProductService {
         }
     }
 
-    public void handlePlaceOrder(User user, HttpSession session, String receiverName, String receiverAddress,
-            String receiverPhone) {
-        // create order detail
-        Cart cart = this.cartRepository.findCartByUser(user);
-        if (cart != null) {
-            List<CartDetail> cartDetails = cart.getCartDetails();
-            // create order
-            Order order = new Order();
-            order.setUser(user);
-            order.setReceiverName(receiverName);
-            order.setReceiverAddress(receiverAddress);
-            order.setReceiverPhone(receiverPhone);
-            order.setStatus("PENDING");
-            double sum = 0;
-            for (CartDetail cd : cartDetails) {
-                sum += cd.getPrice() * cd.getQuantity();
-            }
-            order.setTotalPrice(sum);
-            // save and get id
-            order = this.orderRepository.save(order);
-            for (CartDetail cd : cartDetails) {
-                OrderDetail orderDetail = new OrderDetail();
-                orderDetail.setOrder(order);
-                orderDetail.setProduct(cd.getProduct());
-                orderDetail.setPrice(cd.getPrice());
-                orderDetail.setQuantity(cd.getQuantity());
-                this.orderDetailRepository.save(orderDetail);
-                this.cartDetailRepository.deleteById(cd.getId());
-            }
-            this.cartRepository.deleteById(cart.getId());
-        }
-        // update session
-        session.setAttribute("sum", 0);
-    }
 }

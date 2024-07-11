@@ -3,6 +3,7 @@ package vn.thaihoc.laptopshop.controller.client;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,8 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import vn.thaihoc.laptopshop.domain.Cart;
 import vn.thaihoc.laptopshop.domain.CartDetail;
-import vn.thaihoc.laptopshop.domain.Product;
 import vn.thaihoc.laptopshop.domain.User;
+import vn.thaihoc.laptopshop.service.OrderService;
 import vn.thaihoc.laptopshop.service.ProductService;
 import vn.thaihoc.laptopshop.service.UserService;
 
@@ -20,17 +21,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class ItemController {
     private final ProductService productService;
     private final UserService userService;
+    private final OrderService orderService;
 
-    public ItemController(ProductService productService, UserService userService) {
+    public ItemController(ProductService productService, UserService userService, OrderService orderService) {
         this.productService = productService;
         this.userService = userService;
+        this.orderService = orderService;
     }
 
     @GetMapping("/product/{id}")
@@ -43,7 +45,15 @@ public class ItemController {
     public String addProductToCart(@PathVariable long id, HttpServletRequest request) {
         long productId = id;
         HttpSession session = request.getSession(false);
-        this.productService.handleAddProductToCart((String) session.getAttribute("email"), productId, session);
+        this.productService.handleAddProductToCart((String) session.getAttribute("email"), productId, session, 1);
+        return "redirect:/";
+    }
+
+    @PostMapping("/add-product-by-quantity/{id}")
+    public String addProductByQuantityToCart(@PathVariable long id, HttpServletRequest request,
+            @RequestParam("addquantity") long addquantity) {
+        HttpSession session = request.getSession(false);
+        this.productService.handleAddProductToCart((String) session.getAttribute("email"), id, session, addquantity);
         return "redirect:/";
     }
 
@@ -104,13 +114,21 @@ public class ItemController {
         HttpSession session = request.getSession(false);
         User user = new User();
         user.setId((long) session.getAttribute("id"));
-        this.productService.handlePlaceOrder(user, session, receiverName, receiverAddress, receiverPhone);
+        this.orderService.handlePlaceOrder(user, session, receiverName, receiverAddress, receiverPhone);
         return "redirect:/thank-for-order";
     }
 
     @GetMapping("/thank-for-order")
     public String thankForOrder() {
         return "client/cart/thankyou";
+    }
+
+    @GetMapping("/order-history")
+    public String getOrderHistoryPage(Model model, HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        User user = this.userService.getUserByEmail((String) session.getAttribute("email"));
+        model.addAttribute("orders", user.getOrders());
+        return "client/account/order_history";
     }
 
 }
