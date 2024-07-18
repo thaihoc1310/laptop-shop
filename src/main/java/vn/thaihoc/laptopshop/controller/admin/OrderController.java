@@ -4,16 +4,15 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.ui.Model;
-import org.springframework.security.access.method.P;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 
 import vn.thaihoc.laptopshop.domain.Order;
 import vn.thaihoc.laptopshop.service.OrderService;
@@ -27,8 +26,21 @@ public class OrderController {
     }
 
     @GetMapping("/admin/order")
-    public String getOrder(Model model) {
-        List<Order> orders = this.orderService.getAllOrders();
+    public String getOrder(Model model,
+            @RequestParam("page") Optional<String> pageOptional) {
+        int page = 1;
+        try {
+            if (pageOptional.isPresent()) {
+                page = Integer.parseInt(pageOptional.get());
+            }
+        } catch (Exception e) {
+
+        }
+        Pageable pageable = PageRequest.of(page - 1, 1);
+        Page<Order> pageOrders = this.orderService.getAllOrders(pageable);
+        List<Order> orders = pageOrders.getContent();
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", pageOrders.getTotalPages());
         model.addAttribute("orders1", orders);
         return "admin/order/order_view";
     }
