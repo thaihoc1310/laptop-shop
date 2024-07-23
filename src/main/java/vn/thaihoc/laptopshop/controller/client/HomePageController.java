@@ -1,6 +1,7 @@
 package vn.thaihoc.laptopshop.controller.client;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,6 +20,7 @@ import vn.thaihoc.laptopshop.service.ProductService;
 import vn.thaihoc.laptopshop.service.UserService;
 
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.validation.Valid;
 
@@ -36,9 +38,9 @@ public class HomePageController {
 
     @GetMapping("/")
     public String getHomePage(Model model) {
-        Pageable pageable = PageRequest.of(0, 4);
-        Page<Product> pageProducts = this.productService.getAllProducts(pageable);
-        List<Product> products = pageProducts.getContent();
+        // Pageable pageable = PageRequest.of(0, 4);
+        // Page<Product> pageProducts = this.productService.getAllProducts(pageable);
+        List<Product> products = this.productService.getAllProducts();
         model.addAttribute("products", products);
         return "client/homepage/homepage_view";
     }
@@ -74,4 +76,22 @@ public class HomePageController {
         return "client/auth/access-denied";
     }
 
+    @GetMapping("/products")
+    public String getProductPage(Model model, @RequestParam("page") Optional<String> pageOptional) {
+        int page = 1;
+        try {
+            if (pageOptional.isPresent()) {
+                page = Integer.parseInt(pageOptional.get());
+            }
+        } catch (Exception e) {
+
+        }
+        Pageable pageable = PageRequest.of(page - 1, 6);
+        Page<Product> pageProducts = this.productService.getAllProducts(pageable);
+        List<Product> products = pageProducts.getContent();
+        model.addAttribute("products", products);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", pageProducts.getTotalPages());
+        return "client/product/all_product";
+    }
 }
