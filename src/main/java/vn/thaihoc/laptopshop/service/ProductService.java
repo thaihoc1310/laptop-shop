@@ -12,13 +12,11 @@ import jakarta.servlet.http.HttpSession;
 import vn.thaihoc.laptopshop.domain.Cart;
 import vn.thaihoc.laptopshop.domain.CartDetail;
 import vn.thaihoc.laptopshop.domain.Product;
-import vn.thaihoc.laptopshop.domain.Product_;
 import vn.thaihoc.laptopshop.domain.User;
 import vn.thaihoc.laptopshop.repository.CartDetailRepository;
 import vn.thaihoc.laptopshop.repository.CartRepository;
-import vn.thaihoc.laptopshop.repository.OrderDetailRepository;
-import vn.thaihoc.laptopshop.repository.OrderRepository;
 import vn.thaihoc.laptopshop.repository.ProductRepository;
+import vn.thaihoc.laptopshop.service.specification.ProductSpecs;
 
 @Service
 public class ProductService {
@@ -26,22 +24,13 @@ public class ProductService {
     private final CartRepository cartRepository;
     private final CartDetailRepository cartDetailRepository;
     private final UserService userService;
-    private final OrderRepository orderRepository;
-    private final OrderDetailRepository orderDetailRepository;
 
     public ProductService(ProductRepository productRepository, CartRepository cartRepository,
-            CartDetailRepository cartDetailRepository, UserService userService, OrderRepository orderRepository,
-            OrderDetailRepository orderDetailRepository) {
+            CartDetailRepository cartDetailRepository, UserService userService) {
         this.productRepository = productRepository;
         this.cartRepository = cartRepository;
         this.cartDetailRepository = cartDetailRepository;
         this.userService = userService;
-        this.orderRepository = orderRepository;
-        this.orderDetailRepository = orderDetailRepository;
-    }
-
-    private Specification<Product> nameLike(String name) {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get(Product_.NAME), "%" + name + "%");
     }
 
     public void saveProduct(Product newProduct) {
@@ -56,13 +45,69 @@ public class ProductService {
         return this.productRepository.findAll();
     }
 
-    public Page<Product> getAllProducts(Pageable pageable, String name) {
-        return this.productRepository.findAll(this.nameLike(name), pageable);
+    // public Page<Product> getAllProducts(Pageable pageable, String factory) {
+    // return this.productRepository.findAll(ProductSpecs.matchFactory(factory),
+    // pageable);
+    // }
+
+    // public Page<Product> getAllProducts(Pageable pageable, List<String> factory)
+    // {
+    // return this.productRepository.findAll(ProductSpecs.matchListFactory(factory),
+    // pageable);
+    // }
+
+    // public Page<Product> getAllProducts(Pageable pageable, String price) {
+    // double minv = 0;
+    // double maxv = 1000000000;
+    // if (price.equals("10-toi-15-trieu")) {
+    // minv = 10000000;
+    // maxv = 15000000;
+    // } else if (price.equals("15-toi-30-trieu")) {
+    // minv = 15000000;
+    // maxv = 30000000;
+    // }
+    // return this.productRepository.findAll(ProductSpecs.matchPrice(minv, maxv),
+    // pageable);
+    // }
+
+    public Page<Product> getAllProducts(Pageable pageable, List<String> price) {
+        Specification<Product> combinedSpec = (root, query, criteriaBuilder) -> criteriaBuilder.disjunction();
+        // disjunction => combinedSpec = NULL:
+        // (create specification , begin with null value and can combined with
+        // operators("toan tu "))
+        double minv = 0;
+        double maxv = 1000000000;
+        boolean check = false;
+        for (String s : price) {
+            if (s.equals("10-toi-15-trieu")) {
+                minv = 10000000;
+                maxv = 15000000;
+            } else if (s.equals("15-toi-20-trieu")) {
+                minv = 15000000;
+                maxv = 20000000;
+            } else if (s.equals("20-toi-30-trieu")) {
+                minv = 20000000;
+                maxv = 30000000;
+            }
+            if (minv != 0 && maxv != 1000000000) {
+                Specification<Product> rangeSpec = ProductSpecs.matchMultiplePrice(minv, maxv);
+                combinedSpec = combinedSpec.or(rangeSpec);
+                check = true;
+            }
+        }
+        if (check)
+            return this.productRepository.findAll(combinedSpec, pageable);
+        return this.productRepository.findAll(pageable);
     }
 
     public Page<Product> getAllProducts(Pageable pageable) {
         return this.productRepository.findAll(pageable);
     }
+
+    // public Page<Product> getAllProducts(Pageable pageable, double maxPrice) {
+    // return this.productRepository.findAll(ProductSpecs.maxPrice(maxPrice),
+    // pageable);
+    // }
 
     public Product getProductById(long id) {
         return this.productRepository.findProductById(id);
