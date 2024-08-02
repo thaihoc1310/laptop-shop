@@ -13,6 +13,7 @@ import vn.thaihoc.laptopshop.domain.Cart;
 import vn.thaihoc.laptopshop.domain.CartDetail;
 import vn.thaihoc.laptopshop.domain.Product;
 import vn.thaihoc.laptopshop.domain.User;
+import vn.thaihoc.laptopshop.domain.dto.ProductCriteriaDTO;
 import vn.thaihoc.laptopshop.repository.CartDetailRepository;
 import vn.thaihoc.laptopshop.repository.CartRepository;
 import vn.thaihoc.laptopshop.repository.ProductRepository;
@@ -45,33 +46,8 @@ public class ProductService {
         return this.productRepository.findAll();
     }
 
-    // public Page<Product> getAllProducts(Pageable pageable, String factory) {
-    // return this.productRepository.findAll(ProductSpecs.matchFactory(factory),
-    // pageable);
-    // }
-
-    // public Page<Product> getAllProducts(Pageable pageable, List<String> factory)
-    // {
-    // return this.productRepository.findAll(ProductSpecs.matchListFactory(factory),
-    // pageable);
-    // }
-
-    // public Page<Product> getAllProducts(Pageable pageable, String price) {
-    // double minv = 0;
-    // double maxv = 1000000000;
-    // if (price.equals("10-toi-15-trieu")) {
-    // minv = 10000000;
-    // maxv = 15000000;
-    // } else if (price.equals("15-toi-30-trieu")) {
-    // minv = 15000000;
-    // maxv = 30000000;
-    // }
-    // return this.productRepository.findAll(ProductSpecs.matchPrice(minv, maxv),
-    // pageable);
-    // }
-
-    public Page<Product> getAllProducts(Pageable pageable, List<String> price) {
-        Specification<Product> combinedSpec = (root, query, criteriaBuilder) -> criteriaBuilder.disjunction();
+    Specification<Product> getCombinedSpec(Pageable pageable, List<String> price) {
+        Specification<Product> combinedSpec = Specification.where(null);
         // disjunction => combinedSpec = NULL:
         // (create specification , begin with null value and can combined with
         // operators("toan tu "))
@@ -79,25 +55,28 @@ public class ProductService {
         double maxv = 1000000000;
         boolean check = false;
         for (String s : price) {
-            if (s.equals("10-toi-15-trieu")) {
+            if (s.equals("10-15-trieu")) {
                 minv = 10000000;
                 maxv = 15000000;
-            } else if (s.equals("15-toi-20-trieu")) {
+            } else if (s.equals("15-20-trieu")) {
                 minv = 15000000;
                 maxv = 20000000;
-            } else if (s.equals("20-toi-30-trieu")) {
+            } else if (s.equals("20-30-trieu")) {
                 minv = 20000000;
                 maxv = 30000000;
+            } else if (s.equals("duoi-10-trieu")) {
+                maxv = 10000000;
+            } else if (s.equals("tren-20-trieu")) {
+                minv = 20000000;
+                maxv = 1000000000;
             }
-            if (minv != 0 && maxv != 1000000000) {
+            if (minv != 0 && maxv != 0) {
                 Specification<Product> rangeSpec = ProductSpecs.matchMultiplePrice(minv, maxv);
                 combinedSpec = combinedSpec.or(rangeSpec);
                 check = true;
             }
         }
-        if (check)
-            return this.productRepository.findAll(combinedSpec, pageable);
-        return this.productRepository.findAll(pageable);
+        return combinedSpec;
     }
 
     public Page<Product> getAllProducts(Pageable pageable) {
@@ -108,6 +87,26 @@ public class ProductService {
     // return this.productRepository.findAll(ProductSpecs.maxPrice(maxPrice),
     // pageable);
     // }
+    public Page<Product> getAllProducts(Pageable pageable, ProductCriteriaDTO productCriteriaDTO) {
+        Specification<Product> combinedSpec = Specification.where(null);
+        // if (productCriteriaDTO.getTarget() == null && productCriteriaDTO.getFactory()
+        // == null &&
+        // productCriteriaDTO.getPrice() == null) {
+        // return this.productRepository.findAll(pageable);
+        // }
+        if (productCriteriaDTO.getTarget() != null && productCriteriaDTO.getTarget().isPresent()) {
+            Specification<Product> currentSpec = ProductSpecs.matchListTarget(productCriteriaDTO.getTarget().get());
+            combinedSpec = combinedSpec.and(currentSpec);
+        }
+        if (productCriteriaDTO.getFactory() != null && productCriteriaDTO.getFactory().isPresent()) {
+            Specification<Product> currentSpec = ProductSpecs.matchListFactory(productCriteriaDTO.getFactory().get());
+            combinedSpec = combinedSpec.and(currentSpec);
+        }
+        if (productCriteriaDTO.getPrice() != null && productCriteriaDTO.getPrice().isPresent()) {
+            combinedSpec = combinedSpec.and(getCombinedSpec(pageable, productCriteriaDTO.getPrice().get()));
+        }
+        return this.productRepository.findAll(combinedSpec, pageable);
+    }
 
     public Product getProductById(long id) {
         return this.productRepository.findProductById(id);

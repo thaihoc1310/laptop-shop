@@ -1,5 +1,6 @@
 package vn.thaihoc.laptopshop.controller.client;
 
+import java.net.http.HttpRequest;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,14 +18,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import vn.thaihoc.laptopshop.domain.Product;
+import vn.thaihoc.laptopshop.domain.Product_;
 import vn.thaihoc.laptopshop.domain.User;
+import vn.thaihoc.laptopshop.domain.dto.ProductCriteriaDTO;
 import vn.thaihoc.laptopshop.domain.dto.RegisterDTO;
 import vn.thaihoc.laptopshop.service.ProductService;
 import vn.thaihoc.laptopshop.service.UserService;
 
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @Controller
@@ -79,38 +84,36 @@ public class HomePageController {
     }
 
     @GetMapping("/products")
-    public String getProductPage(Model model, @RequestParam("page") Optional<String> pageOptional,
-            @RequestParam("factory") Optional<String> factoryOptional,
-            @RequestParam("min-price") Optional<String> minPriceOptional,
-            @RequestParam("max-price") Optional<String> maxPriceOptional,
-            @RequestParam("price") Optional<String> priceOptional) {
+    public String getProductPage(Model model, ProductCriteriaDTO productCriteriaDTO, HttpServletRequest request) {
         int page = 1;
         try {
-            if (pageOptional.isPresent()) {
-                page = Integer.parseInt(pageOptional.get());
+            if (productCriteriaDTO.getPage().isPresent()) {
+                page = Integer.parseInt(productCriteriaDTO.getPage().get());
             }
         } catch (Exception e) {
 
         }
 
         Pageable pageable = PageRequest.of(page - 1, 6);
-
-        // String factory = factoryOptional.isPresent() ? factoryOptional.get() : "";
-        // String price = priceOptional.isPresent() ? priceOptional.get() : "";
-        List<String> price = priceOptional.isPresent() ? Arrays.asList(priceOptional.get().split(","))
-                : new ArrayList<String>();
-        double minPrice = minPriceOptional.isPresent() ? Double.parseDouble(minPriceOptional.get()) : 0;
-        double maxPrice = maxPriceOptional.isPresent() ? Double.parseDouble(maxPriceOptional.get()) : 2000000000;
-
-        // List<String> factory = Arrays.asList(factoryOptional.get().split(","));
-
-        // Page<Product> pageProducts = this.productService.getAllProducts(pageable,
-        // maxPrice);
-        Page<Product> pageProducts = this.productService.getAllProducts(pageable, price);
+        // check sort
+        if (productCriteriaDTO.getSort() != null && productCriteriaDTO.getSort().isPresent()) {
+            String sort = productCriteriaDTO.getSort().get();
+            if (sort.equals("gia-tang-dan")) {
+                pageable = PageRequest.of(page - 1, 6, Sort.by(Product_.PRICE).ascending());
+            } else if (sort.equals("gia-giam-dan")) {
+                pageable = PageRequest.of(page - 1, 6, Sort.by(Product_.PRICE).descending());
+            }
+        }
+        String qs = request.getQueryString();
+        if (qs != null && !qs.isBlank()) {
+            qs = qs.replace("page=" + page, "");
+        }
+        Page<Product> pageProducts = this.productService.getAllProducts(pageable, productCriteriaDTO);
         List<Product> products = pageProducts.getContent();
         model.addAttribute("products", products);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", pageProducts.getTotalPages());
+        model.addAttribute("queryString", qs);
         return "client/product/all_product";
     }
 }
