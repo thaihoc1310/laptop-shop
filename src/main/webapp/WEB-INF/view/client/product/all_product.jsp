@@ -217,7 +217,8 @@
                                                                     value="${product.price}" />
                                                                 đ
                                                             </p>
-                                                            <form action="/add-product-to-cart/${product.id}"
+                                                            <form
+                                                                action="/add-product-to-cart/${product.id}?root=products"
                                                                 method="post">
                                                                 <input type="hidden" name="${_csrf.parameterName}"
                                                                     value="${_csrf.token}" />

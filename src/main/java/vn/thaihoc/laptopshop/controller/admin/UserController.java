@@ -48,7 +48,7 @@ public class UserController {
         } catch (Exception e) {
 
         }
-        Pageable pageable = PageRequest.of(page - 1, 1);
+        Pageable pageable = PageRequest.of(page - 1, 10);
         Page<User> pageUsers = this.userService.getAllUsers(pageable);
         List<User> users = pageUsers.getContent();
         model.addAttribute("currentPage", page);

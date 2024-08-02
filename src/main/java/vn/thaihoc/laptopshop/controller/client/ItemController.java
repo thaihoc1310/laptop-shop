@@ -1,7 +1,9 @@
 package vn.thaihoc.laptopshop.controller.client;
 
+import java.lang.foreign.Linker.Option;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -41,11 +43,15 @@ public class ItemController {
     }
 
     @PostMapping("/add-product-to-cart/{id}")
-    public String addProductToCart(@PathVariable long id, HttpServletRequest request) {
+    public String addProductToCart(@PathVariable long id, HttpServletRequest request,
+            @RequestParam("root") Optional<String> rooturl) {
         long productId = id;
         HttpSession session = request.getSession(false);
         this.productService.handleAddProductToCart((String) session.getAttribute("email"), productId, session, 1);
-        return "redirect:/";
+        if (rooturl != null && rooturl.isPresent()) {
+            return "redirect:/" + rooturl.get();
+        } else
+            return "redirect:/";
     }
 
     @PostMapping("/add-product-by-quantity/{id}")
@@ -53,7 +59,7 @@ public class ItemController {
             @RequestParam("addquantity") long addquantity) {
         HttpSession session = request.getSession(false);
         this.productService.handleAddProductToCart((String) session.getAttribute("email"), id, session, addquantity);
-        return "redirect:/";
+        return "redirect:/product/{id}";
     }
 
     @GetMapping("/cart")
