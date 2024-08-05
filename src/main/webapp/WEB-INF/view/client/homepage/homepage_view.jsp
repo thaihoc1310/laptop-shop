@@ -30,6 +30,14 @@
 
                 <!-- Template Stylesheet -->
                 <link href="/client/css/style.css" rel="stylesheet">
+
+                <meta name="_csrf" content="${_csrf.token}" />
+                <!-- default header name is X-CSRF-TOKEN -->
+                <meta name="_csrf_header" content="${_csrf.headerName}" />
+
+                <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.css"
+                    rel="stylesheet">
+
             </head>
 
             <body>
@@ -117,16 +125,16 @@
                                                                         <fmt:formatNumber value="${product.price}"
                                                                             type="number" /> đ
                                                                     </p>
-                                                                    <form action="/add-product-to-cart/${product.id}"
-                                                                        method="post">
-                                                                        <button
-                                                                            class="btn border border-secondary rounded-pill px-3 text-primary mx-auto"><i
-                                                                                class="fa fa-shopping-bag me-2 text-primary"></i>
-                                                                            Add to cart</button>
-                                                                        <input type="hidden"
+                                                                    <!-- <form action="/add-product-to-cart/${product.id}"
+                                                                        method="post"> -->
+                                                                    <button data-product-id="${product.id}"
+                                                                        class="btnAddToCartHomepage btn border border-secondary rounded-pill px-3 text-primary mx-auto"><i
+                                                                            class="fa fa-shopping-bag me-2 text-primary"></i>
+                                                                        Add to cart</button>
+                                                                    <!-- <input type="hidden"
                                                                             name="${_csrf.parameterName}"
                                                                             value="${_csrf.token}" />
-                                                                    </form>
+                                                                    </form> -->
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -142,10 +150,10 @@
                 </div>
                 <!-- Fruits Shop End-->
 
+
                 <jsp:include page="../layout/feature.jsp" />
+
                 <jsp:include page="../layout/footer.jsp" />
-
-
 
 
                 <!-- Back to Top -->
@@ -163,6 +171,8 @@
 
                 <!-- Template Javascript -->
                 <script src="/client/js/main.js"></script>
+                <script
+                    src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js"></script>
             </body>
 
             </html>

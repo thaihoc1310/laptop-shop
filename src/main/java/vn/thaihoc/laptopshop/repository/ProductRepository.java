@@ -13,6 +13,7 @@ import vn.thaihoc.laptopshop.domain.Product;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
+    @SuppressWarnings("unchecked")
     Product save(Product newProduct);
 
     void deleteById(long id);

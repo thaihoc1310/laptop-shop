@@ -53,7 +53,6 @@ public class ProductService {
         // operators("toan tu "))
         double minv = 0;
         double maxv = 1000000000;
-        boolean check = false;
         for (String s : price) {
             if (s.equals("10-15-trieu")) {
                 minv = 10000000;
@@ -65,6 +64,7 @@ public class ProductService {
                 minv = 20000000;
                 maxv = 30000000;
             } else if (s.equals("duoi-10-trieu")) {
+                minv = 1;
                 maxv = 10000000;
             } else if (s.equals("tren-20-trieu")) {
                 minv = 20000000;
@@ -73,7 +73,6 @@ public class ProductService {
             if (minv != 0 && maxv != 0) {
                 Specification<Product> rangeSpec = ProductSpecs.matchMultiplePrice(minv, maxv);
                 combinedSpec = combinedSpec.or(rangeSpec);
-                check = true;
             }
         }
         return combinedSpec;
@@ -83,17 +82,8 @@ public class ProductService {
         return this.productRepository.findAll(pageable);
     }
 
-    // public Page<Product> getAllProducts(Pageable pageable, double maxPrice) {
-    // return this.productRepository.findAll(ProductSpecs.maxPrice(maxPrice),
-    // pageable);
-    // }
     public Page<Product> getAllProducts(Pageable pageable, ProductCriteriaDTO productCriteriaDTO) {
         Specification<Product> combinedSpec = Specification.where(null);
-        // if (productCriteriaDTO.getTarget() == null && productCriteriaDTO.getFactory()
-        // == null &&
-        // productCriteriaDTO.getPrice() == null) {
-        // return this.productRepository.findAll(pageable);
-        // }
         if (productCriteriaDTO.getTarget() != null && productCriteriaDTO.getTarget().isPresent()) {
             Specification<Product> currentSpec = ProductSpecs.matchListTarget(productCriteriaDTO.getTarget().get());
             combinedSpec = combinedSpec.and(currentSpec);
@@ -142,7 +132,7 @@ public class ProductService {
                     cartDetail.setQuantity(addquantity);
 
                     // update cart sum
-                    long sum = cart.getSum() + addquantity;
+                    long sum = cart.getSum() + 1;
                     cart.setSum(sum);
                     this.cartRepository.save(cart);
                     session.setAttribute("sum", sum);

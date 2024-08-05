@@ -1,10 +1,6 @@
 package vn.thaihoc.laptopshop.controller.client;
 
-import java.net.http.HttpRequest;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,7 +23,6 @@ import vn.thaihoc.laptopshop.service.UserService;
 
 import org.springframework.web.bind.annotation.PostMapping;
 
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 

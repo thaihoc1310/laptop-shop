@@ -31,6 +31,10 @@
 
                     <!-- Template Stylesheet -->
                     <link href="/client/css/style.css" rel="stylesheet">
+                    <meta name="_csrf" content="${_csrf.token}" />
+                    <meta name="_csrf_header" content="${_csrf.headerName}" />
+                    <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.css"
+                        rel="stylesheet">
                 </head>
 
                 <body>
@@ -80,33 +84,33 @@
                                             </div>
                                             <p class="mb-4">${product.target}</p>
                                             <p class="mb-4">${product.shortDesc}</p>
-                                            <form action="/add-product-by-quantity/${product.id}" method="post">
-                                                <div class="input-group quantity mb-5" style="width: 100px;">
-                                                    <div class="input-group-btn">
-                                                        <button type="button"
-                                                            class="btn btn-sm btn-minus rounded-circle bg-light border">
-                                                            <i class="fa fa-minus"></i>
-                                                        </button>
-                                                    </div>
-                                                    <input type="text"
-                                                        class="form-control form-control-sm text-center border-0"
-                                                        value="1" name="addquantity">
-                                                    <div class="input-group-btn">
-                                                        <button type="button"
-                                                            class="btn btn-sm btn-plus rounded-circle bg-light border">
-                                                            <i class="fa fa-plus"></i>
-                                                        </button>
-                                                    </div>
+                                            <!-- <form action="/add-product-by-quantity/${product.id}" method="post"> -->
+                                            <div class="input-group quantity mb-5" style="width: 100px;">
+                                                <div class="input-group-btn">
+                                                    <button type="button"
+                                                        class="btn btn-sm btn-minus rounded-circle bg-light border">
+                                                        <i class="fa fa-minus"></i>
+                                                    </button>
                                                 </div>
-                                                <button type="submit"
-                                                    class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary"><i
-                                                        class="fa fa-shopping-bag me-2 text-primary"></i> Add to
-                                                    cart</button>
-                                                <div>
-                                                    <input type="hidden" name="${_csrf.parameterName}"
-                                                        value="${_csrf.token}" />
+                                                <input type="text" id="cartDetails0.quantity"
+                                                    class="form-control form-control-sm text-center border-0" value="1"
+                                                    name="addquantity">
+                                                <div class="input-group-btn">
+                                                    <button type="button"
+                                                        class="btn btn-sm btn-plus rounded-circle bg-light border">
+                                                        <i class="fa fa-plus"></i>
+                                                    </button>
                                                 </div>
-                                            </form>
+                                            </div>
+                                            <button type="submit" data-product-id="${product.id}"
+                                                class=" btnAddToCartDetail btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary"><i
+                                                    class="fa fa-shopping-bag me-2 text-primary"></i> Add to
+                                                cart</button>
+                                            <div>
+                                                <input type="hidden" name="${_csrf.parameterName}"
+                                                    value="${_csrf.token}" />
+                                            </div>
+                                            <!-- </form> -->
                                         </div>
                                         <div class="col-lg-12">
                                             <nav>
@@ -196,7 +200,8 @@
                     <script src="/client/lib/waypoints/waypoints.min.js"></script>
                     <script src="/client/lib/lightbox/js/lightbox.min.js"></script>
                     <script src="/client/lib/owlcarousel/owl.carousel.min.js"></script>
-
+                    <script
+                        src="http://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js"></script>
                     <!-- Template Javascript -->
                     <script src="/client/js/main.js"></script>
                 </body>

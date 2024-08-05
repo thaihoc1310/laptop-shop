@@ -11,6 +11,7 @@ import vn.thaihoc.laptopshop.domain.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
+    @SuppressWarnings("unchecked")
     User save(User thaihoc);
 
     void deleteById(long id);
