@@ -38,6 +38,12 @@ public class ItemController {
     @GetMapping("/product/{id}")
     public String getMethodName(Model model, @PathVariable long id) {
         model.addAttribute("product", this.productService.getProductById(id));
+        model.addAttribute("countApple", this.productService.getAllProductsByFactory("APPLE").size());
+        model.addAttribute("countDell", this.productService.getAllProductsByFactory("DELL").size());
+        model.addAttribute("countAsus", this.productService.getAllProductsByFactory("ASUS").size());
+        model.addAttribute("countLenovo", this.productService.getAllProductsByFactory("LENOVO").size());
+        model.addAttribute("countAcer", this.productService.getAllProductsByFactory("ACER").size());
+        model.addAttribute("countLG", this.productService.getAllProductsByFactory("LG").size());
         return "client/product/product_detail";
     }
 

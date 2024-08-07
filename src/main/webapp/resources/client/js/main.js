@@ -118,7 +118,6 @@
         $('.btn-play').click(function () {
             $videoSrc = $(this).data("src");
         });
-        console.log($videoSrc);
 
         $('#videoModal').on('shown.bs.modal', function (e) {
             $("#video").attr('src', $videoSrc + "?autoplay=1&amp;modestbranding=1&amp;showinfo=0");
@@ -189,9 +188,6 @@
                 newTotal = +currentTotal;
             } else {
                 newTotal = newPrice - (+preVal) * (+price) + (+currentTotal);
-                // console.log(newTotal);
-                // console.log(newPrice);
-                // console.log(oldValue * (+price));
             }
 
             //reset change
@@ -315,9 +311,6 @@
         const productId = $(this).attr('data-product-id');
         const token = $("meta[name='_csrf']").attr("content");
         const header = $("meta[name='_csrf_header']").attr("content");
-        console.log(token);
-        console.log(header);
-        console.log(productId);
         $.ajax({
             url: `${window.location.origin}/api/add-product-to-cart`,
             beforeSend: function (xhr) {
@@ -342,7 +335,6 @@
             },
             error: function (response) {
                 alert("có lỗi xảy ra")
-                console.log("error: ", response);
             }
 
         });
@@ -388,7 +380,6 @@
             },
             error: function (response) {
                 alert("có lỗi xảy ra")
-                console.log("error: ", response);
             }
 
         });

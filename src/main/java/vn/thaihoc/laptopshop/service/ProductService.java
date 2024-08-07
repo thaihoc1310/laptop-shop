@@ -98,6 +98,10 @@ public class ProductService {
         return this.productRepository.findAll(combinedSpec, pageable);
     }
 
+    public List<Product> getAllProductsByFactory(String factory) {
+        return this.productRepository.findAllByFactory(factory);
+    }
+
     public Product getProductById(long id) {
         return this.productRepository.findProductById(id);
     }

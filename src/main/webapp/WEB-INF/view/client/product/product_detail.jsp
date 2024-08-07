@@ -138,32 +138,44 @@
                                                 <ul class="list-unstyled fruite-categorie">
                                                     <li>
                                                         <div class="d-flex justify-content-between fruite-name">
-                                                            <a href="#"><i class="fas fa-apple-alt me-2"></i>Apples</a>
-                                                            <span>(3)</span>
+                                                            <a href="/products?page=1&factory=APPLE"><i
+                                                                    class="fas fa-apple-alt me-2"></i>Apples</a>
+                                                            <span>(${countApple})</span>
                                                         </div>
                                                     </li>
                                                     <li>
                                                         <div class="d-flex justify-content-between fruite-name">
-                                                            <a href="#"><i class="fas fa-apple-alt me-2"></i>Dell</a>
-                                                            <span>(5)</span>
+                                                            <a href="/products?page=1&factory=DELL"><i
+                                                                    class="fas fa-apple-alt me-2"></i>Dell</a>
+                                                            <span>(${countDell})</span>
                                                         </div>
                                                     </li>
                                                     <li>
                                                         <div class="d-flex justify-content-between fruite-name">
-                                                            <a href="#"><i class="fas fa-apple-alt me-2"></i>Asus</a>
-                                                            <span>(2)</span>
+                                                            <a href="/products?page=1&factory=ASUS"><i
+                                                                    class="fas fa-apple-alt me-2"></i>Asus</a>
+                                                            <span>(${countAsus})</span>
                                                         </div>
                                                     </li>
                                                     <li>
                                                         <div class="d-flex justify-content-between fruite-name">
-                                                            <a href="#"><i class="fas fa-apple-alt me-2"></i>Acer</a>
-                                                            <span>(8)</span>
+                                                            <a href="/products?page=1&factory=ACER"><i
+                                                                    class="fas fa-apple-alt me-2"></i>Acer</a>
+                                                            <span>(${countAcer})</span>
                                                         </div>
                                                     </li>
                                                     <li>
                                                         <div class="d-flex justify-content-between fruite-name">
-                                                            <a href="#"><i class="fas fa-apple-alt me-2"></i>Lenovo</a>
-                                                            <span>(5)</span>
+                                                            <a href="/products?page=1&factory=LENOVO"><i
+                                                                    class="fas fa-apple-alt me-2"></i>Lenovo</a>
+                                                            <span>(${countLenovo})</span>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="d-flex justify-content-between fruite-name">
+                                                            <a href="/products?page=1&factory=LG"><i
+                                                                    class="fas fa-apple-alt me-2"></i>LG</a>
+                                                            <span>(${countLG})</span>
                                                         </div>
                                                     </li>
                                                 </ul>

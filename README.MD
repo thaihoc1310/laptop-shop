@@ -1,6 +1,7 @@
 # Java Spring laptop-shop
 Use easy crud template in : https://github.com/thaihoc1310/spring-mvc
 Use model Model-View-Controller (MVC) architecture
+This project is a learning project
 ## Features
 -Spring Boot 
 -Spring MVC
